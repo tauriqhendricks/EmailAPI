@@ -12,35 +12,37 @@ namespace EmailAPI.Services
 
         public EmailMessageService(IOptions<EmailSettings> settings)
         {
-            this._settings = settings.Value;
+            _settings = settings.Value;
         }
 
-        public string SendMessage(EmailModel model)
+        public EmailModel SendMessage(EmailModel model)
         {
-            string from = model.From;
-            string body = model.Body;
+            EmailModel email = new EmailModel();
+            email.FullName = model.FullName;
+            email.From = model.From;
+            email.Body = model.Body;
 
             MailMessage mm = new MailMessage();
-            mm.From = new MailAddress(this._settings.From);
-            mm.To.Add(this._settings.To);
-            mm.Subject = "Please contact " + from;
-            mm.Body = body;
+            mm.From = new MailAddress(_settings.From);
+            mm.To.Add(_settings.To);
+            mm.Subject = "Please contact " + email.FullName;
+            mm.Body = email.Body + Environment.NewLine + Environment.NewLine + "Email Address: " + email.From;
             mm.IsBodyHtml = false;
 
             SmtpClient smtp = new SmtpClient("smtp.gmail.com");
             smtp.UseDefaultCredentials = true;
             smtp.Port = 587;
             smtp.EnableSsl = true;
-            smtp.Credentials = new System.Net.NetworkCredential(this._settings.From, this._settings.Key);
+            smtp.Credentials = new System.Net.NetworkCredential(_settings.From, _settings.Key);
 
             try
             {
                 smtp.Send(mm);
-                return "Email sent!!";
+                return email;
             }
             catch (Exception)
             {
-                return "Email was not sent!!";
+                return null;
             }
         }
     }
