@@ -21,9 +21,10 @@ namespace EmailAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<EmailMessageService>();
+            services.AddScoped<EmailMessageService>();
             services.Configure<EmailSettings>(Configuration.GetSection(
                                        EmailSettings.Email));
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,6 +36,8 @@ namespace EmailAPI
             }
 
             app.UseRouting();
+
+            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
             app.UseAuthorization();
 
