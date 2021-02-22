@@ -27,3 +27,6 @@ This is the development version.
 This project is built with the following tools:
 * [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-5.0)
 * [Visual Studio](https://visualstudio.microsoft.com/)
+
+This project is built in the following language:
+* C#
