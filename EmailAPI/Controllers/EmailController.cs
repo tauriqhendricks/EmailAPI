@@ -13,7 +13,7 @@ namespace EmailAPI.Controllers
 
         public EmailController(EmailMessageService emailMessageService)
         {
-            this._emailMessageService = emailMessageService;
+            _emailMessageService = emailMessageService;
         }
 
         [HttpPost]
@@ -21,7 +21,12 @@ namespace EmailAPI.Controllers
         {
             try
             {
-                string result = this._emailMessageService.SendMessage(model);
+                EmailModel result = _emailMessageService.SendMessage(model);
+
+                if (result == null)
+                {
+                    return BadRequest("error sending email");
+                }
 
                 return Ok(result);
             }
